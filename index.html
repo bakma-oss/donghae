@@ -69,15 +69,13 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .detail{margin:6px 0 0 -62px;padding:8px 0 2px 62px;background:var(--bg);border-radius:0}
 .detail .m{font-size:12px;color:var(--tx2);margin-bottom:5px}
 .detail svg{display:block;width:100%;height:50px}
-.row.item{background:var(--card)}
-.row.item .tm b{font-size:16px;font-weight:600;color:var(--tx2)}
-.row.item .nm{font-size:15px}
-.row.item .min{margin-left:6px;font-size:13px;font-weight:500;padding:1px 8px;border-radius:9px}
-.row.item.cert .min{background:var(--p-cert-bg);color:var(--p-cert)}.row.item.rest .min{background:var(--p-rest-bg);color:var(--p-rest)}.row.item.meal .min{background:var(--amber-bg);color:var(--amber)}.row.item.service .min,.row.item.etc .min{background:var(--p-etc-bg);color:var(--p-etc)}
-.row.item.cert .ico{color:var(--p-cert)}.row.item.rest .ico{color:var(--p-rest)}.row.item.meal .ico{color:var(--amber)}.row.item.service .ico,.row.item.etc .ico{color:var(--p-etc)}
-.row.item .min input{width:52px;min-height:26px;padding:1px 4px;font-size:13px;text-align:right}
-.row.item .x{position:absolute;right:30px;top:8px;color:var(--tx3);font-size:20px;background:transparent;border:0;min-height:0;width:26px;padding:0}
-.row.item .hdl{right:4px}
+.row.item{padding:4px 12px 4px 108px;align-items:center;border-bottom:0;font-size:12px;color:var(--tx2)}
+.row.item .pill{display:inline-flex;align-items:center;gap:5px;border-radius:10px;padding:3px 8px 3px 9px;font-size:12px;font-weight:500}
+.pill .ic{width:14px;height:14px}
+.pill.cert{background:var(--p-cert-bg);color:var(--p-cert)}.pill.rest{background:var(--p-rest-bg);color:var(--p-rest)}.pill.meal{background:var(--amber-bg);color:var(--amber)}.pill.service,.pill.etc{background:var(--p-etc-bg);color:var(--p-etc)}
+.row.item .pill input{width:46px;min-height:24px;padding:1px 4px;font-size:12px;text-align:right}
+.row.item .x{margin-left:auto;color:var(--tx3);font-size:16px;background:transparent;border:0;min-height:0;padding:0 4px}
+.row.item .hdl{position:static;height:24px;line-height:24px;margin-left:2px}
 .row.lodging .nm{font-size:15px}
 .row.lodging input{min-height:30px;padding:3px 6px;font-size:13px}
 .menu{display:flex;justify-content:space-around;padding:14px 14px 4px;font-size:12px;color:var(--tx2);border-top:1px solid var(--line);margin-top:12px}
@@ -89,6 +87,8 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .foot{font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;padding:0 14px}
 #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#222;color:#fff;border-radius:12px;padding:10px 14px;font-size:14px;display:none;z-index:50;align-items:center;gap:12px;max-width:94vw}
 #toast.show{display:flex}#toast button{background:transparent;border:1px solid #777;color:#fff;min-height:30px;padding:3px 10px}
+#alarmBanner{position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top));z-index:60;background:#b3372f;color:#fff;border-radius:12px;padding:12px 14px;font-size:15px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#alarmBanner button{margin-left:auto;background:#fff;color:#b3372f;border:0;min-height:32px;padding:4px 14px;font-weight:600}
 #ghost{position:fixed;left:10px;right:10px;pointer-events:none;z-index:40;background:var(--card);border:1px solid var(--blue);border-radius:10px;padding:8px 10px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.18);display:none}
 body.dragging{-webkit-user-select:none;user-select:none;overflow:hidden}
 </style>
@@ -117,7 +117,7 @@ let uid = Date.now();
 
 const defaultState = () => ({
   v: 1,
-  settings: { speed: 15, cert: 5, rest: 10, meal: 40, service: 15 },
+  settings: { speed: 15, cert: 5, rest: 10, meal: 40, service: 15, alarm: 0, alarmLead: 0 },
   days: [
     { date: '2026-10-04', start: '13:30', end: 3, lodging: { name: '구산비치모텔', km: 1.1 } },
     { date: '2026-10-05', start: '06:30', end: 10, lodging: { name: '', km: 0 } },
@@ -129,6 +129,7 @@ const defaultState = () => ({
   adj: {},
   taxi: true,
   theme: 'paper',
+  order: {},
   open: {},
 });
 
@@ -143,7 +144,7 @@ function load() {
     if (s && s.v === 1 && Array.isArray(s.days) && s.days.length) {
       const m = { ...d, ...s };
       m.settings = { ...d.settings, ...(s.settings || {}) };
-      m.adj = s.adj || {}; m.actuals = s.actuals || {}; m.open = s.open || {}; m.items = Array.isArray(s.items) ? s.items : d.items;
+      m.adj = s.adj || {}; m.order = s.order || {}; m.actuals = s.actuals || {}; m.open = s.open || {}; m.items = Array.isArray(s.items) ? s.items : d.items;
       m.theme = s.theme || d.theme;
       m.days = s.days.map(x => ({ date: x.date, start: x.start || '06:30', end: x.end, lodging: { name: (x.lodging && x.lodging.name) || '', km: (x.lodging && Number(x.lodging.km)) || 0 } }));
       return m;
@@ -169,6 +170,13 @@ function segKm(i) { if (i <= 0) return 0; if (i === DATA.taxiSeg && state.taxi) 
 function segMin(i, speed) { if (i === DATA.taxiSeg && state.taxi) return 120; return segKm(i) / speed * 60; }
 function itemsAfter(i) { return state.items.filter(it => it.after === i); }
 function adjOf(i) { return state.adj[i] || {}; }
+function orderedItems(i) {
+  const list = [];
+  if (DATA.cert.includes(i)) for (const k of ['cert', 'rest']) { const m = k === 'cert' ? certMin(i) : restMin(i); if (m > 0) list.push({ id: k + '-' + i, builtin: true, after: i, type: k, min: m, label: k === 'cert' ? '인증' : '휴식' }); }
+  list.push(...itemsAfter(i));
+  const ord = state.order[i] || [];
+  return list.sort((a, b) => { const x = ord.indexOf(a.id), y = ord.indexOf(b.id); return (x < 0 ? 999 : x) - (y < 0 ? 999 : y); });
+}
 function certMin(i) { const a = adjOf(i); return a.cert == null ? state.settings.cert : a.cert; }
 function restMin(i) { const a = adjOf(i); return a.rest == null ? state.settings.rest : a.rest; }
 
@@ -192,8 +200,7 @@ function compute(useActuals) {
     let out = arr;
     const row = { type: 'stop', i, d, arr, plan, km, cum, dayKm, remain: dayTotal[d] - dayKm, cert, taxi: i === DATA.taxiSeg && state.taxi, actual: state.actuals[i] || null };
     rows.push(row);
-    if (cert) for (const k of ['cert', 'rest']) { const m = k === 'cert' ? certMin(i) : restMin(i); if (m > 0) { rows.push({ type: 'item', it: { id: k + '-' + i, builtin: true, after: i, type: k, min: m, label: k === 'cert' ? '인증' : '휴식' }, d, start: out, end: out + m }); out += m; } }
-    for (const it of itemsAfter(i)) { rows.push({ type: 'item', it, d, start: out, end: out + it.min }); out += it.min; }
+    for (const it of orderedItems(i)) { rows.push({ type: 'item', it, d, start: out, end: out + it.min }); out += it.min; }
     row.out = out;
     if (i === day.end) {
       const L = day.lodging; let endTime = out;
@@ -255,6 +262,8 @@ function render() {
     <label>인증 후 휴식 분<input type="number" min="0" value="${S.rest}" data-set="rest"></label>
     <label>식사 기본 분<input type="number" min="0" value="${S.meal}" data-set="meal"></label>
     <label>정비 기본 분<input type="number" min="0" value="${S.service}" data-set="service"></label>
+    <label>출발 알림 소리<select data-set="alarm"><option value="0" ${!S.alarm ? 'selected' : ''}>끔</option><option value="1" ${S.alarm ? 'selected' : ''}>켬</option></select></label>
+    <label>출발 몇 분 전에 알림<select data-set="alarmLead"><option value="0" ${S.alarmLead == 0 ? 'selected' : ''}>정시</option><option value="3" ${S.alarmLead == 3 ? 'selected' : ''}>3분 전</option><option value="5" ${S.alarmLead == 5 ? 'selected' : ''}>5분 전</option></select></label>
     <label>테마<select data-act="theme">${Object.entries(THEMES).map(([k, v]) => `<option value="${k}" ${(state.theme || 'paper') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
     <label>은어다리→임원<select data-act="taxi"><option value="1" ${state.taxi ? 'selected' : ''}>택시 2시간 고정</option><option value="0" ${!state.taxi ? 'selected' : ''}>자전거 ${DATA.segments[DATA.taxiSeg - 1].km}km</option></select></label>
   </div><div class="rowb"><button class="sm" data-act="addday">하루 추가</button></div>
@@ -310,11 +319,7 @@ function render() {
       h += `</div><button class="ins" data-act="insert" data-i="${i}" aria-label="항목 삽입">+</button><span class="hdl" aria-label="끌어서 이동">⋮⋮</span></div>`;
     } else if (r.type === 'item') {
       const it = r.it, ic = ICONS[it.type] || ICONS.etc;
-      h += `<div class="row item ${it.type}" data-row="item" data-id="${it.id}" data-day="${r.d}" ${it.builtin ? 'data-builtin="1"' : ''}>
-        <div class="tm"><b>${fmt(r.start)}</b><small style="text-decoration:none">~${fmt(r.end)}</small></div>
-        <div class="ico">${ic}</div>
-        <div class="bd"><div class="nm">${it.label}<span class="min" ${ui.editItem === it.id ? '' : `data-act="edititem" data-id="${it.id}"`}>${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `${it.min}분`}</span></div><div class="sub">${it.builtin ? (it.type === 'cert' ? '인증 소요 · ' : '인증 후 휴식 · ') : ''}${fmt(r.end)} 출발</div></div>
-        <button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button>${it.builtin ? '' : '<span class="hdl" aria-label="끌어서 이동">⋮⋮</span>'}</div>`;
+      h += `<div class="row item" data-row="item" data-id="${it.id}" data-day="${r.d}" data-after="${it.after}" ${it.builtin ? 'data-builtin="1"' : ''}><span class="pill ${it.type}">${ic} ${it.label} ${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `<span data-act="edititem" data-id="${it.id}">${it.min}분</span>`}</span><span>${fmt(r.start)}~${fmt(r.end)}</span><button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button><span class="hdl" aria-label="끌어서 이동">⋮⋮</span></div>`;
     } else if (r.type === 'lodging') {
       const D = state.days[r.d];
       h += `<div class="row lodging" data-row="lodging" data-day="${r.d}"><div class="tm"><b>${fmt(r.arr)}</b></div><div class="ico">${ICONS.lodging}</div><div class="bd"><div class="nm"><input type="text" value="${D.lodging.name || ''}" placeholder="숙소 이름" data-lodname="${r.d}" style="flex:1;min-width:0"><input type="number" step="0.1" value="${D.lodging.km || 0}" data-lodkm="${r.d}" style="width:60px">km</div><div class="sub">숙박 · 다음 날 여기서 출발</div></div></div>`;
@@ -342,6 +347,7 @@ function render() {
 }
 
 document.addEventListener('click', e => {
+  if (state.settings.alarm && !audioCtx) unlockAudio();
   const t = e.target.closest('[data-act]'); if (!t) return;
   const act = t.dataset.act, i = Number(t.dataset.i);
   if (act === 'panel') { ui.panel = ui.panel === t.dataset.p ? null : t.dataset.p; ui.resetArmed = false; }
@@ -349,7 +355,7 @@ document.addEventListener('click', e => {
   else if (act === 'closeall') { state.open = {}; ui.timeEdit = null; ui.timeInput = false; ui.insertAfter = null; ui.editItem = null; ui.dayStart = null; ui.panel = null; }
   else if (act === 'time') { ui.timeEdit = ui.timeEdit === i ? null : i; ui.timeInput = false; ui.insertAfter = null; if (ui.timeEdit !== null) state.open[i] = state.open[i]; }
   else if (act === 'timeclose') { ui.timeEdit = null; ui.timeInput = false; }
-  else if (act === 'recnow') { snapshot(`${DATA.stops[i]} ${nowStr()} 기록`); state.actuals[i] = nowStr(); ui.timeEdit = null; }
+  else if (act === 'recnow') { snapshot(`${DATA.stops[i]} ${nowStr()} 기록`); state.actuals[i] = nowStr(); ui.timeEdit = null; alerted = null; }
   else if (act === 'recinput') { ui.timeInput = true; }
   else if (act === 'recsave') { const v = $(`[data-recin="${i}"]`).value; if (v) { snapshot(`${DATA.stops[i]} ${v} 기록`); state.actuals[i] = v; } ui.timeEdit = null; ui.timeInput = false; }
   else if (act === 'recclear') { snapshot(`${DATA.stops[i]} 기록 삭제`); delete state.actuals[i]; ui.timeEdit = null; }
@@ -375,7 +381,7 @@ function addItem(after, type, label, min) {
 }
 document.addEventListener('change', e => {
   const el = e.target;
-  if (el.dataset.set) { const v = Number(el.value); if (v >= 0) state.settings[el.dataset.set] = v; }
+  if (el.dataset.set) { const v = Number(el.value); if (v >= 0) state.settings[el.dataset.set] = v; if (el.dataset.set === 'alarm') { if (v) unlockAudio(); alerted = null; } }
   else if (el.dataset.act === 'taxi') { state.taxi = el.value === '1'; }
   else if (el.dataset.act === 'theme') { state.theme = el.value; }
   else if (el.dataset.dayin != null) { state.days[Number(el.dataset.dayin)].start = el.value || '06:30'; ui.dayStart = null; }
@@ -391,7 +397,7 @@ const ghost = $('#ghost');
 let press = null, drag = null, autoScroll = 0;
 document.addEventListener('pointerdown', e => {
   const row = e.target.closest('[data-row="stop"],[data-row="item"]');
-  if (!row || row.dataset.builtin || e.target.closest('button,input,select,[data-act]')) return;
+  if (!row || e.target.closest('button,input,select,[data-act]')) return;
   if (e.target.closest('.hdl')) { e.preventDefault(); startDrag(row, e); return; }
   press = { row, x: e.clientX, y: e.clientY, timer: setTimeout(() => startDrag(row, e), 350) };
 });
@@ -400,7 +406,7 @@ function startDrag(row, e) {
   press = null;
   drag = { kind: row.dataset.row, i: Number(row.dataset.i), id: row.dataset.id, fromDay: Number(row.dataset.day), target: null, before: false };
   row.classList.add('lift'); document.body.classList.add('dragging');
-  ghost.textContent = row.dataset.row === 'stop' ? DATA.stops[drag.i] : (state.items.find(x => x.id === drag.id) || {}).label;
+  ghost.textContent = row.dataset.row === 'stop' ? DATA.stops[drag.i] : (row.querySelector('.pill') || row).textContent.trim();
   ghost.style.display = 'block'; moveGhost(e.clientY);
   if (navigator.vibrate) navigator.vibrate(30);
 }
@@ -432,20 +438,60 @@ document.addEventListener('touchmove', e => { if (drag) e.preventDefault(); }, {
     if (tDay < d.fromDay) { if (i === 0) return; snapshot(`${DATA.stops[i]} → ${tDay + 1}일차로`); for (let k = tDay; k < d.fromDay; k++) state.days[k].end = i; }
     else { if (i === LAST) return; snapshot(`${DATA.stops[i]} → ${d.fromDay + 2}일차로`); for (let k = d.fromDay; k < tDay; k++) state.days[k].end = i - 1; }
   } else {
-    const it = state.items.find(x => x.id === d.id); if (!it) return;
-    let after;
-    if (d.target.dataset.row === 'stop') after = Number(d.target.dataset.i) - (d.before ? 1 : 0);
-    else if (d.target.dataset.row === 'item') { const o = state.items.find(x => x.id === d.target.dataset.id); after = o ? o.after : it.after; }
+    const builtin = /^(cert|rest)-\d+$/.test(d.id);
+    const srcRow = document.querySelector(`[data-row="item"][data-id="${d.id}"]`);
+    const fromAfter = srcRow ? Number(srcRow.dataset.after) : null;
+    const it = builtin ? null : state.items.find(x => x.id === d.id);
+    if (!builtin && !it) return;
+    let after, beforeId = null;
+    if (d.target.dataset.row === 'stop') { after = Number(d.target.dataset.i) - (d.before ? 1 : 0); }
+    else if (d.target.dataset.row === 'item') { after = Number(d.target.dataset.after); beforeId = d.before ? d.target.dataset.id : null; if (!d.before) { const ids = orderedItems(after).map(x => x.id); const k = ids.indexOf(d.target.dataset.id); beforeId = ids[k + 1] || null; } }
     else if (d.target.dataset.row === 'lodging' || d.target.dataset.row === 'dayend') after = state.days[tDay].end;
     else if (d.target.classList.contains('dayh')) after = tDay > 0 ? state.days[tDay - 1].end : 0;
     if (after == null || after < 0) return;
-    snapshot(`${it.label} 이동`);
-    state.items = state.items.filter(x => x.id !== it.id); it.after = after; state.items.push(it);
+    if (builtin && after !== fromAfter) return;
+    snapshot(`${(srcRow && srcRow.querySelector('.pill') || { textContent: '항목' }).textContent.trim()} 이동`);
+    if (!builtin) { state.items = state.items.filter(x => x.id !== it.id); it.after = after; state.items.push(it); }
+    const ids = orderedItems(after).map(x => x.id).filter(x => x !== d.id);
+    const pos = beforeId ? ids.indexOf(beforeId) : -1;
+    if (pos >= 0) ids.splice(pos, 0, d.id); else ids.push(d.id);
+    state.order[after] = ids;
   }
   safeRender();
 }));
 document.addEventListener('contextmenu', e => { if (e.target.closest('[data-row]')) e.preventDefault(); });
 
+let audioCtx = null, alerted = null;
+function unlockAudio() {
+  try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); const o = audioCtx.createOscillator(), g = audioCtx.createGain(); g.gain.value = 0.0001; o.connect(g).connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.05); } catch (e) {}
+}
+function beep() {
+  try {
+    if (!audioCtx) unlockAudio();
+    const t0 = audioCtx.currentTime;
+    for (let k = 0; k < 4; k++) { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = 'square'; o.frequency.value = k % 2 ? 1175 : 880; g.gain.setValueAtTime(0.0001, t0 + k * 0.35); g.gain.exponentialRampToValueAtTime(0.5, t0 + k * 0.35 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + k * 0.35 + 0.3); o.connect(g).connect(audioCtx.destination); o.start(t0 + k * 0.35); o.stop(t0 + k * 0.35 + 0.32); }
+  } catch (e) {}
+  if (navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 600]);
+}
+function alarmTarget() {
+  const rec = Object.keys(state.actuals).map(Number); if (!rec.length) return null;
+  const i = Math.max(...rec); if (i >= LAST) return null;
+  const C = compute(true); const row = C.rows.find(r => r.type === 'stop' && r.i === i); if (!row) return null;
+  return { i, out: row.out, key: i + ':' + Math.round(row.out) + ':' + state.settings.alarmLead };
+}
+function checkAlarm() {
+  if (!state.settings.alarm) return;
+  const t = alarmTarget(); if (!t || alerted === t.key) return;
+  const d = new Date(); const now = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+  if (now >= t.out - (state.settings.alarmLead || 0) && now < t.out + 30) {
+    alerted = t.key; beep();
+    const b = document.createElement('div'); b.id = 'alarmBanner';
+    b.innerHTML = `<b>⏰ ${state.settings.alarmLead ? state.settings.alarmLead + '분 뒤 ' : ''}출발 시간</b> ${DATA.stops[t.i]} ${fmt(t.out)} 출발 예정 <button id="alarmOk">확인</button>`;
+    document.body.appendChild(b); $('#alarmOk').onclick = () => b.remove();
+    setTimeout(() => b.remove(), 120000);
+  }
+}
+setInterval(checkAlarm, 15000);
 function safeRender() {
   try { render(); }
   catch (e) {
