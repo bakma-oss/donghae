@@ -22,7 +22,7 @@ button.sm{min-height:30px;padding:4px 9px;font-size:13px}
 input,select{font:inherit;color:inherit;border:1px solid var(--line2);border-radius:8px;padding:6px 8px;min-height:36px;background:var(--card)}
 input[type=number]{width:72px}input[type=time]{width:118px}
 .top{display:flex;align-items:center;justify-content:space-between;padding:4px 14px 8px}
-.top h1{font-size:17px;font-weight:600}
+.top h1{font-size:17px;font-weight:600;margin-right:auto}
 .top .sum{font-size:12px;color:var(--tx2);cursor:pointer}
 .panel{margin:0 12px 10px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px}
 .panel .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
@@ -242,7 +242,8 @@ function render() {
   const nextDay = C.days.find(x => x.d === next.d);
   const delta = Math.round(next.arr - planOf[nextI]);
   const S = state.settings;
-  let h = `<div class="top"><h1>동해안 종주 큐시트</h1><span class="sum" data-act="panel" data-p="settings">평속 ${S.speed} · 인증 ${S.cert} · 휴식 ${S.rest} ${ui.panel === 'settings' ? '▲' : '▼'}</span></div>`;
+  const anyOpen = Object.values(state.open).some(Boolean) || ui.timeEdit !== null || ui.insertAfter !== null || ui.panel;
+  let h = `<div class="top"><h1>동해안 종주 큐시트</h1>${anyOpen ? '<button class="sm" data-act="closeall" style="margin-left:auto;margin-right:8px">▲ 모두 접기</button>' : ''}<span class="sum" data-act="panel" data-p="settings">평속 ${S.speed} · 인증 ${S.cert} · 휴식 ${S.rest} ${ui.panel === 'settings' ? '▲' : '▼'}</span></div>`;
 
   if (ui.panel === 'settings') h += `<div class="panel"><div class="grid">
     <label>평균속도 km/h<input type="number" step="0.5" min="5" max="40" value="${S.speed}" data-set="speed"></label>
@@ -315,7 +316,7 @@ function render() {
     }
   }
 
-  h += `<div class="menu"><span class="${ui.panel === 'settings' ? 'on' : ''}" data-act="panel" data-p="settings">⚙ 설정</span><span class="${ui.panel === 'bus' ? 'on' : ''}" data-act="panel" data-p="bus">🚌 귀가 버스</span><span data-act="reset">${ui.resetArmed ? '정말 초기화? 다시 탭' : '↺ 전체 초기화'}</span></div>`;
+  h += `<div class="menu"><span data-act="closeall">▲ 모두 접기</span><span class="${ui.panel === 'settings' ? 'on' : ''}" data-act="panel" data-p="settings">⚙ 설정</span><span class="${ui.panel === 'bus' ? 'on' : ''}" data-act="panel" data-p="bus">🚌 귀가 버스</span><span data-act="reset">${ui.resetArmed ? '정말 초기화? 다시 탭' : '↺ 전체 초기화'}</span></div>`;
   if (ui.panel === 'bus') {
     const last = C.rows.filter(x => x.type === 'stop').pop(); const arr = last.arr; let picked = false;
     h += `<div class="panel bus" style="margin-top:10px"><div style="font-weight:600;margin-bottom:4px">대진 → 동서울 <small style="font-weight:400;color:var(--tx2)">대진 도착 ${fmt(arr)} 기준</small></div>`;
@@ -337,6 +338,7 @@ document.addEventListener('click', e => {
   const act = t.dataset.act, i = Number(t.dataset.i);
   if (act === 'panel') { ui.panel = ui.panel === t.dataset.p ? null : t.dataset.p; ui.resetArmed = false; }
   else if (act === 'toggle') { state.open[i] = !state.open[i]; }
+  else if (act === 'closeall') { state.open = {}; ui.timeEdit = null; ui.timeInput = false; ui.insertAfter = null; ui.editItem = null; ui.dayStart = null; ui.panel = null; }
   else if (act === 'time') { ui.timeEdit = ui.timeEdit === i ? null : i; ui.timeInput = false; ui.insertAfter = null; if (ui.timeEdit !== null) state.open[i] = state.open[i]; }
   else if (act === 'timeclose') { ui.timeEdit = null; ui.timeInput = false; }
   else if (act === 'recnow') { snapshot(`${DATA.stops[i]} ${nowStr()} 기록`); state.actuals[i] = nowStr(); ui.timeEdit = null; }
