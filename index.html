@@ -133,8 +133,19 @@ let ui = { panel: null, timeEdit: null, timeInput: false, insertAfter: null, set
 let undoSnap = null, undoTimer = null;
 
 function load() {
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.v === 1) return s; } catch (e) {}
-  return defaultState();
+  const d = defaultState();
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && s.v === 1 && Array.isArray(s.days) && s.days.length) {
+      const m = { ...d, ...s };
+      m.settings = { ...d.settings, ...(s.settings || {}) };
+      m.adj = s.adj || {}; m.actuals = s.actuals || {}; m.open = s.open || {}; m.items = Array.isArray(s.items) ? s.items : d.items;
+      m.theme = s.theme || d.theme;
+      m.days = s.days.map(x => ({ date: x.date, start: x.start || '06:30', end: x.end, lodging: { name: (x.lodging && x.lodging.name) || '', km: (x.lodging && Number(x.lodging.km)) || 0 } }));
+      return m;
+    }
+  } catch (e) {}
+  return d;
 }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 function snapshot(msg) {
@@ -142,7 +153,7 @@ function snapshot(msg) {
   const t = $('#toast'); $('#toastMsg').textContent = msg; t.classList.add('show');
   clearTimeout(undoTimer); undoTimer = setTimeout(() => { t.classList.remove('show'); undoSnap = null; }, 5000);
 }
-$('#toastUndo').onclick = () => { if (undoSnap) { state = JSON.parse(undoSnap); undoSnap = null; } $('#toast').classList.remove('show'); save(); render(); };
+$('#toastUndo').onclick = () => { if (undoSnap) { state = JSON.parse(undoSnap); undoSnap = null; } $('#toast').classList.remove('show'); save(); safeRender(); };
 
 function dayOf(i) { for (let d = 0; d < state.days.length; d++) if (i <= state.days[d].end) return d; return state.days.length - 1; }
 function normalizeDays() {
@@ -343,8 +354,8 @@ document.addEventListener('click', e => {
   else if (act === 'daystart') { ui.dayStart = ui.dayStart === Number(t.dataset.d) ? null : Number(t.dataset.d); }
   else if (act === 'addlodging') { state.days[Number(t.dataset.d)].lodging = { name: '숙소', km: 1 }; }
   else if (act === 'addday') { const n = state.days.length, prev = state.days[n - 1]; if (prev.end - (n > 1 ? state.days[n - 2].end : -1) < 2) return; prev.end = LAST - 1; const dt = new Date(prev.date + 'T00:00:00'); dt.setDate(dt.getDate() + 1); state.days.push({ date: `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`, start: '06:30', end: LAST, lodging: { name: '', km: 0 } }); }
-  else if (act === 'reset') { if (!ui.resetArmed) { ui.resetArmed = true; setTimeout(() => { ui.resetArmed = false; render(); }, 3000); } else { state = defaultState(); ui.resetArmed = false; ui.panel = null; } }
-  render();
+  else if (act === 'reset') { if (!ui.resetArmed) { ui.resetArmed = true; setTimeout(() => { ui.resetArmed = false; safeRender(); }, 3000); } else { state = defaultState(); ui.resetArmed = false; ui.panel = null; } }
+  safeRender();
 });
 function addItem(after, type, label, min) {
   const S = state.settings; const d = TYPES[type];
@@ -362,7 +373,7 @@ document.addEventListener('change', e => {
   else if (el.dataset.lodkm != null) { state.days[Number(el.dataset.lodkm)].lodging.km = Math.max(0, Number(el.value) || 0); }
   else if (el.dataset.itemmin != null) { const id = el.dataset.itemmin, m = id.match(/^(cert|rest)-(\d+)$/), v = Math.max(0, Number(el.value) || 0); if (m) { const si = Number(m[2]); state.adj[si] = { ...adjOf(si), [m[1]]: v }; } else { const it = state.items.find(x => x.id === id); if (it) it.min = v; } ui.editItem = null; }
   else return;
-  render();
+  safeRender();
 });
 
 /* long-press drag: move stops between days, move items between stops */
@@ -421,11 +432,18 @@ document.addEventListener('touchmove', e => { if (drag) e.preventDefault(); }, {
     snapshot(`${it.label} 이동`);
     state.items = state.items.filter(x => x.id !== it.id); it.after = after; state.items.push(it);
   }
-  render();
+  safeRender();
 }));
 document.addEventListener('contextmenu', e => { if (e.target.closest('[data-row]')) e.preventDefault(); });
 
-render();
+function safeRender() {
+  try { render(); }
+  catch (e) {
+    $('#app').innerHTML = `<div style="padding:24px 16px;font-size:15px;line-height:1.6"><b>화면을 그리지 못했습니다.</b><br><span style="font-size:12px;color:#888">${String(e && e.message || e)}</span><br><br>저장된 기록이 새 버전과 맞지 않을 수 있습니다. 아래 버튼으로 기록을 초기화하면 다시 열립니다.<br><br><button id="hardReset" style="font:inherit;padding:10px 16px;border-radius:9px;border:1px solid #c33;color:#c33;background:#fff">기록 초기화 후 다시 열기</button></div>`;
+    $('#hardReset').onclick = () => { try { localStorage.removeItem(KEY); } catch (x) {} location.reload(); };
+  }
+}
+safeRender();
 })();
 </script>
 </body>
