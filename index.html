@@ -55,8 +55,7 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .ico{width:24px;flex:none;display:flex;justify-content:center;padding-top:2px;color:var(--tx3)}
 .ico .ic{width:22px;height:22px}
 .ic.c-cert{color:var(--red)}
-.pill .ic{width:14px;height:14px}
-.pill.cert{background:var(--p-cert-bg);color:var(--p-cert)}.pill.rest{background:var(--p-rest-bg);color:var(--p-rest)}.pill.meal{background:var(--amber-bg);color:var(--amber)}.pill.service,.pill.etc{background:var(--p-etc-bg);color:var(--p-etc)}
+
 .nm .ok{color:var(--green);font-size:13px}
 .nm .chev{margin-left:auto;color:var(--tx3);font-size:11px}
 .sub{font-size:12px;color:var(--tx2);margin-top:2px}
@@ -70,10 +69,15 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .detail{margin:6px 0 0 -62px;padding:8px 0 2px 62px;background:var(--bg);border-radius:0}
 .detail .m{font-size:12px;color:var(--tx2);margin-bottom:5px}
 .detail svg{display:block;width:100%;height:50px}
-.row.item{padding:4px 12px 4px 108px;align-items:center;border-bottom:0;font-size:12px;color:var(--tx2)}
-.row.item .pill{display:inline-flex;align-items:center;gap:5px;background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:3px 8px 3px 9px;font-size:12px;font-weight:500}
-.row.item .pill input{width:46px;min-height:24px;padding:1px 4px;font-size:12px;text-align:right}
-.row.item .x{margin-left:auto;color:var(--tx3);font-size:16px;background:transparent;border:0;min-height:0;padding:0 4px}
+.row.item{background:var(--card)}
+.row.item .tm b{font-size:16px;font-weight:600;color:var(--tx2)}
+.row.item .nm{font-size:15px}
+.row.item .min{margin-left:6px;font-size:13px;font-weight:500;padding:1px 8px;border-radius:9px}
+.row.item.cert .min{background:var(--p-cert-bg);color:var(--p-cert)}.row.item.rest .min{background:var(--p-rest-bg);color:var(--p-rest)}.row.item.meal .min{background:var(--amber-bg);color:var(--amber)}.row.item.service .min,.row.item.etc .min{background:var(--p-etc-bg);color:var(--p-etc)}
+.row.item.cert .ico{color:var(--p-cert)}.row.item.rest .ico{color:var(--p-rest)}.row.item.meal .ico{color:var(--amber)}.row.item.service .ico,.row.item.etc .ico{color:var(--p-etc)}
+.row.item .min input{width:52px;min-height:26px;padding:1px 4px;font-size:13px;text-align:right}
+.row.item .x{position:absolute;right:30px;top:8px;color:var(--tx3);font-size:20px;background:transparent;border:0;min-height:0;width:26px;padding:0}
+.row.item .hdl{right:4px}
 .row.lodging .nm{font-size:15px}
 .row.lodging input{min-height:30px;padding:3px 6px;font-size:13px}
 .menu{display:flex;justify-content:space-around;padding:14px 14px 4px;font-size:12px;color:var(--tx2);border-top:1px solid var(--line);margin-top:12px}
@@ -306,7 +310,11 @@ function render() {
       h += `</div><button class="ins" data-act="insert" data-i="${i}" aria-label="항목 삽입">+</button><span class="hdl" aria-label="끌어서 이동">⋮⋮</span></div>`;
     } else if (r.type === 'item') {
       const it = r.it, ic = ICONS[it.type] || ICONS.etc;
-      h += `<div class="row item" data-row="item" data-id="${it.id}" data-day="${r.d}" ${it.builtin ? 'data-builtin="1"' : ''}><span class="pill ${it.type}">${ic} ${it.label} ${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `<span data-act="edititem" data-id="${it.id}">${it.min}분</span>`}</span><span>${fmt(r.start)}~${fmt(r.end)}</span><button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button>${it.builtin ? '<span class="hdl" style="visibility:hidden">⋮⋮</span>' : '<span class="hdl" aria-label="끌어서 이동">⋮⋮</span>'}</div>`;
+      h += `<div class="row item ${it.type}" data-row="item" data-id="${it.id}" data-day="${r.d}" ${it.builtin ? 'data-builtin="1"' : ''}>
+        <div class="tm"><b>${fmt(r.start)}</b><small style="text-decoration:none">~${fmt(r.end)}</small></div>
+        <div class="ico">${ic}</div>
+        <div class="bd"><div class="nm">${it.label}<span class="min" ${ui.editItem === it.id ? '' : `data-act="edititem" data-id="${it.id}"`}>${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `${it.min}분`}</span></div><div class="sub">${it.builtin ? (it.type === 'cert' ? '인증 소요 · ' : '인증 후 휴식 · ') : ''}${fmt(r.end)} 출발</div></div>
+        <button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button>${it.builtin ? '' : '<span class="hdl" aria-label="끌어서 이동">⋮⋮</span>'}</div>`;
     } else if (r.type === 'lodging') {
       const D = state.days[r.d];
       h += `<div class="row lodging" data-row="lodging" data-day="${r.d}"><div class="tm"><b>${fmt(r.arr)}</b></div><div class="ico">${ICONS.lodging}</div><div class="bd"><div class="nm"><input type="text" value="${D.lodging.name || ''}" placeholder="숙소 이름" data-lodname="${r.d}" style="flex:1;min-width:0"><input type="number" step="0.1" value="${D.lodging.km || 0}" data-lodkm="${r.d}" style="width:60px">km</div><div class="sub">숙박 · 다음 날 여기서 출발</div></div></div>`;
