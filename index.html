@@ -8,7 +8,11 @@
 <meta name="apple-mobile-web-app-title" content="동해안 큐시트">
 <title>동해안 종주 큐시트</title>
 <style>
-:root{--bg:#f7f8fa;--card:#fff;--line:#e4e7eb;--line2:#cdd3da;--tx:#1b1f24;--tx2:#5b6470;--tx3:#8a929d;--blue:#2a6fc4;--blue-bg:#e9f1fb;--blue-dk:#1d4f8c;--green:#1a7f4b;--amber:#8a5a12;--amber-bg:#fbeedc;--red:#e05a52;--fill:#c9ddf5;--stroke:#5b93d6}
+html[data-theme=paper]{--bg:#f3eee4;--card:#fffcf5;--line:#e6dfd1;--line2:#cfc5b3;--tx:#2b2620;--tx2:#6b6358;--tx3:#9a9184;--blue:#b5542f;--blue-bg:#f7e4d6;--blue-dk:#7a3317;--now-sub:#9c6a4f;--now-btn:#fff8ef;--now-line:#e3c3ad;--green:#4f7a3a;--green-bg:#e6efdc;--amber:#8a5a12;--amber-bg:#f6e7c6;--red:#c9473d;--fill:#e2cdb9;--stroke:#b5542f;--p-cert-bg:#f6dad6;--p-cert:#8c2b25;--p-rest-bg:#e0e8d6;--p-rest:#3f5f2d;--p-etc-bg:#ebe5da;--p-etc:#5c5347}
+html[data-theme=ocean]{--bg:#eef3f7;--card:#ffffff;--line:#dfe6ec;--line2:#c3cfd9;--tx:#15222e;--tx2:#54667a;--tx3:#8798a8;--blue:#1f6fb2;--blue-bg:#e3eef8;--blue-dk:#164e80;--now-sub:#4f7399;--now-btn:#ffffff;--now-line:#b4cce3;--green:#1b7f5a;--green-bg:#dff2ea;--amber:#8a5a12;--amber-bg:#fbeedc;--red:#dd5a4f;--fill:#c6dcf0;--stroke:#3f86c9;--p-cert-bg:#fbe3e1;--p-cert:#8c2b25;--p-rest-bg:#dcecf7;--p-rest:#1f4f8a;--p-etc-bg:#e6ebf0;--p-etc:#3d4653}
+html[data-theme=dark]{--bg:#111418;--card:#1a1f26;--line:#262d36;--line2:#3a434f;--tx:#e8ecf1;--tx2:#a2adbb;--tx3:#6f7b89;--blue:#5aa2f0;--blue-bg:#17304b;--blue-dk:#cfe4fa;--now-sub:#8fb4dc;--now-btn:#24415f;--now-line:#3b5f85;--green:#5fcf96;--green-bg:#17362a;--amber:#f0c27a;--amber-bg:#3a2c12;--red:#f07167;--fill:#28415d;--stroke:#5aa2f0;--p-cert-bg:#4a2320;--p-cert:#ffb4ad;--p-rest-bg:#1d3652;--p-rest:#a9cdf2;--p-etc-bg:#2a313a;--p-etc:#c4ccd6}
+html[data-theme=mono]{--bg:#f4f4f5;--card:#ffffff;--line:#e5e5e7;--line2:#c9c9cd;--tx:#18181b;--tx2:#5b5b63;--tx3:#8e8e96;--blue:#1f1f24;--blue-bg:#e9e9ec;--blue-dk:#111114;--now-sub:#5b5b63;--now-btn:#ffffff;--now-line:#c9c9cd;--green:#2f7a4a;--green-bg:#e4f1e8;--amber:#7a5a1a;--amber-bg:#f3ead6;--red:#d9463c;--fill:#d9d9de;--stroke:#3a3a40;--p-cert-bg:#fbe3e1;--p-cert:#8c2b25;--p-rest-bg:#e4e4e8;--p-rest:#2b2b33;--p-etc-bg:#ebebee;--p-etc:#44444c}
+html{background:var(--bg)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-size:15px;line-height:1.4;color:var(--tx);background:var(--bg);padding:calc(6px + env(safe-area-inset-top)) 0 calc(30px + env(safe-area-inset-bottom));-webkit-touch-callout:none}
@@ -25,13 +29,13 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .panel label{display:flex;flex-direction:column;font-size:12px;color:var(--tx2);gap:3px}
 .panel .rowb{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .now{margin:0 12px 10px;padding:10px 12px;background:var(--blue-bg);color:var(--blue-dk);border-radius:12px}
-.now .l1{display:flex;justify-content:space-between;font-size:12px;color:#4a6d99}
+.now .l1{display:flex;justify-content:space-between;font-size:12px;color:var(--now-sub)}
 .now .l2{display:flex;justify-content:space-between;align-items:baseline;margin-top:2px}
 .now .l2 b{font-size:18px;font-weight:600}.now .l2 .eta{font-size:28px;font-weight:700;letter-spacing:-.5px}
-.now .l3{display:flex;gap:12px;font-size:12px;color:#4a6d99;margin-top:5px;align-items:center;flex-wrap:wrap}
+.now .l3{display:flex;gap:12px;font-size:12px;color:var(--now-sub);margin-top:5px;align-items:center;flex-wrap:wrap}
 .now .l3 .act{margin-left:auto;display:flex;gap:6px}
-.now .l3 button{min-height:30px;padding:4px 10px;font-size:13px;background:#fff;border-color:#b9cfea;color:var(--blue-dk)}
-.delta.late{color:#b3372f;font-weight:600}.delta.early{color:var(--green);font-weight:600}
+.now .l3 button{min-height:30px;padding:4px 10px;font-size:13px;background:var(--now-btn);border-color:var(--now-line);color:var(--blue-dk)}
+.delta.late{color:var(--red);font-weight:600}.delta.early{color:var(--green);font-weight:600}
 .dayh{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:16px;font-weight:600}
 .dayh .meta{margin-left:auto;font-size:12px;font-weight:400;text-align:right}
 .dayh .meta u{text-decoration:none;border-bottom:1px dashed currentColor}
@@ -40,7 +44,7 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .gap{height:10px;background:var(--bg)}
 .row{display:flex;gap:10px;padding:9px 12px 9px 12px;background:var(--card);position:relative;-webkit-user-select:none;user-select:none;touch-action:pan-y;border-bottom:1px solid var(--line)}
 .row.stop.done{background:var(--blue-bg)}
-.row.stop.next{background:#fff}.row.stop.next .tm b{color:var(--blue)}
+.row.stop.next{background:var(--card)}.row.stop.next .tm b{color:var(--blue)}
 .row.lift{opacity:.55}.row.over{box-shadow:inset 0 -3px 0 var(--blue)}.row.over-up{box-shadow:inset 0 3px 0 var(--blue)}
 .tm{width:52px;flex:none;cursor:pointer}
 .tm b{display:block;font-size:18px;font-weight:700;line-height:1.1}
@@ -48,8 +52,11 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .tm.rec b{color:var(--blue-dk)}
 .bd{flex:1;min-width:0;padding-right:22px}
 .nm{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:500}
-.cert{display:inline-flex;width:18px;height:18px;border-radius:4px;background:var(--red);align-items:center;justify-content:center;flex:none}
-.cert svg{width:12px;height:12px;fill:#fff}
+.ico{width:24px;flex:none;display:flex;justify-content:center;padding-top:2px;color:var(--tx3)}
+.ico .ic{width:22px;height:22px}
+.ic.c-cert{color:var(--red)}
+.pill .ic{width:14px;height:14px}
+.pill.cert{background:var(--p-cert-bg);color:var(--p-cert)}.pill.rest{background:var(--p-rest-bg);color:var(--p-rest)}.pill.meal{background:var(--amber-bg);color:var(--amber)}.pill.service,.pill.etc{background:var(--p-etc-bg);color:var(--p-etc)}
 .nm .ok{color:var(--green);font-size:13px}
 .nm .chev{margin-left:auto;color:var(--tx3);font-size:11px}
 .sub{font-size:12px;color:var(--tx2);margin-top:2px}
@@ -63,7 +70,7 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .detail{margin:6px 0 0 -62px;padding:8px 0 2px 62px;background:var(--bg);border-radius:0}
 .detail .m{font-size:12px;color:var(--tx2);margin-bottom:5px}
 .detail svg{display:block;width:100%;height:50px}
-.row.item{padding:5px 12px 5px 74px;align-items:center;border-bottom:0;font-size:12px;color:var(--tx2)}
+.row.item{padding:4px 12px 4px 108px;align-items:center;border-bottom:0;font-size:12px;color:var(--tx2)}
 .row.item .pill{display:inline-flex;align-items:center;gap:5px;background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:3px 8px 3px 9px;font-size:12px;font-weight:500}
 .row.item .pill input{width:46px;min-height:24px;padding:1px 4px;font-size:12px;text-align:right}
 .row.item .x{margin-left:auto;color:var(--tx3);font-size:16px;background:transparent;border:0;min-height:0;padding:0 4px}
@@ -72,13 +79,13 @@ input[type=number]{width:72px}input[type=time]{width:118px}
 .menu{display:flex;justify-content:space-around;padding:14px 14px 4px;font-size:12px;color:var(--tx2);border-top:1px solid var(--line);margin-top:12px}
 .menu span{cursor:pointer}.menu span.on{color:var(--blue-dk);font-weight:600}
 .bus .b{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px;align-items:center}
-.bus .b.no{color:var(--tx3)}.bus .b.pick{background:#e6f4ec;border-radius:8px;padding:6px}
+.bus .b.no{color:var(--tx3)}.bus .b.pick{background:var(--green-bg);border-radius:8px;padding:6px}
 .bus .b b{width:48px}.bus .b small{color:var(--tx2);font-size:12px}
 .hint{font-size:11px;color:var(--tx3);padding:6px 2px 0}
 .foot{font-size:11px;color:var(--tx3);text-align:center;margin-top:12px;padding:0 14px}
 #toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#222;color:#fff;border-radius:12px;padding:10px 14px;font-size:14px;display:none;z-index:50;align-items:center;gap:12px;max-width:94vw}
 #toast.show{display:flex}#toast button{background:transparent;border:1px solid #777;color:#fff;min-height:30px;padding:3px 10px}
-#ghost{position:fixed;left:10px;right:10px;pointer-events:none;z-index:40;background:#fff;border:1px solid var(--blue);border-radius:10px;padding:8px 10px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.18);display:none}
+#ghost{position:fixed;left:10px;right:10px;pointer-events:none;z-index:40;background:var(--card);border:1px solid var(--blue);border-radius:10px;padding:8px 10px;font-weight:600;box-shadow:0 6px 18px rgba(0,0,0,.18);display:none}
 body.dragging{-webkit-user-select:none;user-select:none;overflow:hidden}
 </style>
 
@@ -115,7 +122,9 @@ const defaultState = () => ({
   ],
   items: [{ id: 'svc0', after: 0, type: 'service', min: 20, label: '정비' }],
   actuals: {},
+  adj: {},
   taxi: true,
+  theme: 'paper',
   open: {},
 });
 
@@ -144,6 +153,9 @@ function normalizeDays() {
 function segKm(i) { if (i <= 0) return 0; if (i === DATA.taxiSeg && state.taxi) return 0; return DATA.segments[i - 1].km; }
 function segMin(i, speed) { if (i === DATA.taxiSeg && state.taxi) return 120; return segKm(i) / speed * 60; }
 function itemsAfter(i) { return state.items.filter(it => it.after === i); }
+function adjOf(i) { return state.adj[i] || {}; }
+function certMin(i) { const a = adjOf(i); return a.cert == null ? state.settings.cert : a.cert; }
+function restMin(i) { const a = adjOf(i); return a.rest == null ? state.settings.rest : a.rest; }
 
 function compute(useActuals) {
   const S = state.settings, rows = [], days = [];
@@ -162,9 +174,10 @@ function compute(useActuals) {
     if (useActuals && state.actuals[i] != null) arr = toMin(state.actuals[i]);
     cum += km; dayKm += km;
     const cert = DATA.cert.includes(i);
-    let out = arr; if (cert) out += S.cert + S.rest;
+    let out = arr;
     const row = { type: 'stop', i, d, arr, plan, km, cum, dayKm, remain: dayTotal[d] - dayKm, cert, taxi: i === DATA.taxiSeg && state.taxi, actual: state.actuals[i] || null };
     rows.push(row);
+    if (cert) for (const k of ['cert', 'rest']) { const m = k === 'cert' ? certMin(i) : restMin(i); if (m > 0) { rows.push({ type: 'item', it: { id: k + '-' + i, builtin: true, after: i, type: k, min: m, label: k === 'cert' ? '인증' : '휴식' }, d, start: out, end: out + m }); out += m; } }
     for (const it of itemsAfter(i)) { rows.push({ type: 'item', it, d, start: out, end: out + it.min }); out += it.min; }
     row.out = out;
     if (i === day.end) {
@@ -187,14 +200,24 @@ function profileSvg(seg) {
   return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="고도"><polygon fill="var(--fill)" points="0,${H} ${pts} ${W},${H}"/><polyline fill="none" stroke="var(--stroke)" stroke-width="1.5" points="${pts}"/><circle cx="${px(P[mi][0]).toFixed(1)}" cy="${py(P[mi][1]).toFixed(1)}" r="2.5" fill="var(--blue)"/><text x="${Math.min(px(P[mi][0]) + 5, W - 40).toFixed(1)}" y="${(py(P[mi][1]) + 10).toFixed(1)}" font-size="10" fill="var(--blue)">${seg.maxEle}m</text></svg>`;
 }
 
-const PAL = [
-  { h: '#b7e4d4', t: '#0a4a3b', e: '#9dd6c2', r: '#5fbfa2' },
-  { h: '#d9d6f5', t: '#2f2a73', e: '#c8c3ef', r: '#8d85dc' },
-  { h: '#f6d3c4', t: '#5a2412', e: '#f0c0ab', r: '#e08d6d' },
-  { h: '#c9ddf5', t: '#0e3a66', e: '#b8d1ef', r: '#6d9fdb' },
-  { h: '#f7dca3', t: '#4a2a02', e: '#f2cf86', r: '#ddaa45' },
-];
-const STAMP = '<span class="cert" aria-label="인증센터"><svg viewBox="0 0 16 16"><rect x="2" y="11" width="12" height="3" rx="1"/><rect x="6" y="4" width="4" height="7" rx="1"/><rect x="4" y="2" width="8" height="2.4" rx="1"/></svg></span>';
+const PALS = {
+  paper: [{ h: '#d9c9a8', t: '#3f3215', e: '#cdb98f', r: '#a98b57' }, { h: '#c9d5c0', t: '#2a3d22', e: '#b9c9ad', r: '#7f9a6e' }, { h: '#e3c7b8', t: '#4a2a1c', e: '#d8b6a3', r: '#b3836a' }, { h: '#c8d2dc', t: '#243441', e: '#b7c4d1', r: '#7d93a8' }, { h: '#e2d2c0', t: '#4a3a26', e: '#d7c3ab', r: '#b09573' }],
+  ocean: [{ h: '#bfe3dc', t: '#0b4a3f', e: '#a9d8cf', r: '#4fb3a1' }, { h: '#c7d8f2', t: '#163a6b', e: '#b5cbed', r: '#5c8dd6' }, { h: '#d7d2f0', t: '#312a6b', e: '#c9c2eb', r: '#8378d2' }, { h: '#f1d6c5', t: '#5a2d16', e: '#ebc7b1', r: '#d98f68' }, { h: '#f3dfa8', t: '#4a3400', e: '#eed38d', r: '#d2ac3f' }],
+  dark: [{ h: '#153d35', t: '#bfeadf', e: '#0f2e28', r: '#3fa58e' }, { h: '#1d2f52', t: '#c6d9f5', e: '#162440', r: '#5a8ad8' }, { h: '#2d2552', t: '#d6cff5', e: '#221c40', r: '#8a7bd8' }, { h: '#4a2c1c', t: '#f3d3c3', e: '#3a2215', r: '#d08a66' }, { h: '#45380f', t: '#f2dfa7', e: '#352b0b', r: '#c9a43c' }],
+  mono: [{ h: '#d8d8dc', t: '#1a1a1e', e: '#c9c9ce', r: '#55555c' }, { h: '#e3ddd3', t: '#2a241b', e: '#d7cfc2', r: '#8a7d68' }, { h: '#d5dedd', t: '#1c2a29', e: '#c6d2d1', r: '#5f7a78' }, { h: '#dedbe6', t: '#25213a', e: '#d1cddd', r: '#75708f' }, { h: '#e6dcd6', t: '#3a2a22', e: '#dacdc5', r: '#9a7f72' }],
+};
+const THEMES = { paper: '종이', ocean: '바다', dark: '야간', mono: '모노' };
+const SV = (body, cls) => `<svg class="ic ${cls || ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+const ICONS = {
+  cert: SV('<rect x="4" y="16" width="16" height="4" rx="1" fill="currentColor" stroke="none"/><rect x="9" y="6" width="6" height="10" rx="1" fill="currentColor" stroke="none"/><rect x="7" y="3" width="10" height="3" rx="1" fill="currentColor" stroke="none"/>', 'c-cert'),
+  rest: SV('<path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 11h2a2 2 0 0 1 0 4h-2"/><path d="M8 5v2M11 4v3"/>', 'c-rest'),
+  meal: SV('<path d="M4 12h16a8 8 0 0 1-16 0z"/><path d="M8 12V5M12 12V5M16 12V5"/>', 'c-meal'),
+  service: SV('<path d="M14 6a4 4 0 0 0 5 5l-9 9a2 2 0 0 1-3-3l9-9a4 4 0 0 0-2-2z"/>', 'c-service'),
+  etc: SV('<path d="M4 7h16M4 12h16M4 17h10"/>', 'c-etc'),
+  terminal: SV('<rect x="4" y="4" width="16" height="13" rx="2"/><path d="M4 11h16M8 17v3M16 17v3M8 8h2M14 8h2"/>', 'c-etc'),
+  taxi: SV('<path d="M5 16l1.5-5h11L19 16"/><rect x="3" y="16" width="18" height="4" rx="1"/><path d="M7 20v2M17 20v2M9 7h6"/>', 'c-etc'),
+  lodging: SV('<path d="M3 18V8M3 14h18v4M3 14V11a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v3"/><path d="M12 14h9v-2a3 3 0 0 0-3-3h-6"/>', 'c-etc'),
+};
 
 function render() {
   normalizeDays();
@@ -216,6 +239,7 @@ function render() {
     <label>인증 후 휴식 분<input type="number" min="0" value="${S.rest}" data-set="rest"></label>
     <label>식사 기본 분<input type="number" min="0" value="${S.meal}" data-set="meal"></label>
     <label>정비 기본 분<input type="number" min="0" value="${S.service}" data-set="service"></label>
+    <label>테마<select data-act="theme">${Object.entries(THEMES).map(([k, v]) => `<option value="${k}" ${(state.theme || 'paper') === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
     <label>은어다리→임원<select data-act="taxi"><option value="1" ${state.taxi ? 'selected' : ''}>택시 2시간 고정</option><option value="0" ${!state.taxi ? 'selected' : ''}>자전거 ${DATA.segments[DATA.taxiSeg - 1].km}km</option></select></label>
   </div><div class="rowb"><button class="sm" data-act="addday">하루 추가</button></div>
   <div class="hint">행을 꾸욱 눌러 끌면 날짜 사이로 옮길 수 있습니다. 시간을 탭하면 도착을 기록합니다.</div></div>`;
@@ -229,18 +253,18 @@ function render() {
   let curDay = -1;
   for (const r of C.rows) {
     if (r.type === 'stop' && r.d !== curDay) {
-      curDay = r.d; const D = state.days[curDay], sum = C.days.find(x => x.d === curDay), c = PAL[curDay % PAL.length];
+      curDay = r.d; const D = state.days[curDay], sum = C.days.find(x => x.d === curDay), c = PALS[state.theme || 'paper'][curDay % 5];
       h += `<div class="dayh" data-day="${curDay}" style="background:${c.h};color:${c.t}">${dateLabel(D.date)} · ${curDay + 1}일차<span class="meta">${km1(sum.total)}km · <u data-act="daystart" data-d="${curDay}">${D.start}</u> 출발 · ${fmt(sum.endTime)} 종료${ui.dayStart === curDay ? `<br><input type="time" value="${D.start}" data-dayin="${curDay}">` : ''}</span></div><div class="dayrows" style="border-color:${c.r}">`;
     }
     if (r.type === 'stop') {
       const i = r.i, seg = i > 0 ? DATA.segments[i - 1] : null, open = state.open[i];
       const cls = ['row', 'stop', r.actual ? 'done' : '', i === nextI && !r.actual ? 'next' : ''].join(' ');
-      let sub = i === 0 ? `동서울 09:10 버스 · 영덕 ${state.days[0].start} 도착` : r.taxi ? `택시 2시간 · 누적 ${km1(r.cum)} · 남은 ${km1(r.remain)}` : `${km1(r.km)}km · 누적 ${km1(r.cum)} · 남은 ${km1(r.remain)}`;
+      let sub = i === 0 ? `동서울 09:10 버스 · 영덕 ${state.days[0].start} 도착` : r.taxi ? `택시 2시간 · 남은 ${km1(r.remain)}` : `${km1(r.km)}km · 남은 ${km1(r.remain)}`;
       sub += i === LAST ? ' · 종주 완료' : ` · ${fmt(r.out)} 출발`;
       if (r.actual) sub = `<span class="ok">실제 ${r.actual} (예정 ${fmt(planOf[i])})</span> · ` + sub;
       h += `<div class="${cls}" data-row="stop" data-i="${i}" data-day="${r.d}">
         <div class="tm ${r.actual ? 'rec' : ''}" data-act="time" data-i="${i}"><b>${fmt(r.arr)}</b>${Math.round(r.arr) !== Math.round(planOf[i]) ? `<small>${fmt(planOf[i])}</small>` : ''}</div>
-        <div class="bd"><div class="nm" data-act="toggle" data-i="${i}">${r.cert ? STAMP : ''}${DATA.stops[i]}${r.actual ? '<span class="ok">✓</span>' : ''}<span class="chev">${open ? '▲' : '▼'}</span></div>
+        <div class="ico">${r.cert ? ICONS.cert : r.taxi ? ICONS.taxi : (i === 0 || i === LAST) ? ICONS.terminal : ''}</div><div class="bd"><div class="nm" data-act="toggle" data-i="${i}">${DATA.stops[i]}${r.actual ? '<span class="ok">✓</span>' : ''}<span class="chev">${open ? '▲' : '▼'}</span></div>
         <div class="sub">${sub}</div>`;
       if (ui.timeEdit === i) {
         const has = !!r.actual;
@@ -263,18 +287,19 @@ function render() {
           <button class="sm" data-act="additem" data-i="${i}" data-type="meal">식사 ${S.meal}분</button>
           <button class="sm" data-act="additem" data-i="${i}" data-type="rest">휴식 ${S.rest}분</button>
           <button class="sm" data-act="additem" data-i="${i}" data-type="service">정비 ${S.service}분</button>
+          ${r.cert && certMin(i) === 0 ? `<button class="sm" data-act="restore" data-i="${i}" data-k="cert">인증 복원</button>` : ''}${r.cert && restMin(i) === 0 ? `<button class="sm" data-act="restore" data-i="${i}" data-k="rest">휴식 복원</button>` : ''}
           <input type="text" placeholder="기타 이름" data-etcname style="width:90px;min-height:30px;padding:3px 6px;font-size:13px"><input type="number" value="15" data-etcmin style="width:56px;min-height:30px;padding:3px 6px;font-size:13px"><button class="sm" data-act="additem" data-i="${i}" data-type="etc">추가</button>
           <button class="sm" data-act="insclose">닫기</button></div>`;
       }
       h += `</div><button class="ins" data-act="insert" data-i="${i}" aria-label="항목 삽입">+</button><span class="hdl" aria-label="끌어서 이동">⋮⋮</span></div>`;
     } else if (r.type === 'item') {
-      const it = r.it, ic = { meal: '🍚', rest: '☕', service: '🔧', etc: '•' }[it.type] || '•';
-      h += `<div class="row item" data-row="item" data-id="${it.id}" data-day="${r.d}"><span class="pill">${ic} ${it.label} ${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `<span data-act="edititem" data-id="${it.id}">${it.min}분</span>`}</span><span>${fmt(r.start)}~${fmt(r.end)}</span><button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button><span class="hdl" aria-label="끌어서 이동">⋮⋮</span></div>`;
+      const it = r.it, ic = ICONS[it.type] || ICONS.etc;
+      h += `<div class="row item" data-row="item" data-id="${it.id}" data-day="${r.d}" ${it.builtin ? 'data-builtin="1"' : ''}><span class="pill ${it.type}">${ic} ${it.label} ${ui.editItem === it.id ? `<input type="number" value="${it.min}" data-itemmin="${it.id}">분` : `<span data-act="edititem" data-id="${it.id}">${it.min}분</span>`}</span><span>${fmt(r.start)}~${fmt(r.end)}</span><button class="x" data-act="delitem" data-id="${it.id}" aria-label="삭제">×</button>${it.builtin ? '<span class="hdl" style="visibility:hidden">⋮⋮</span>' : '<span class="hdl" aria-label="끌어서 이동">⋮⋮</span>'}</div>`;
     } else if (r.type === 'lodging') {
       const D = state.days[r.d];
-      h += `<div class="row lodging" data-row="lodging" data-day="${r.d}"><div class="tm"><b>${fmt(r.arr)}</b></div><div class="bd"><div class="nm">🛏 <input type="text" value="${D.lodging.name || ''}" placeholder="숙소 이름" data-lodname="${r.d}" style="flex:1;min-width:0"><input type="number" step="0.1" value="${D.lodging.km || 0}" data-lodkm="${r.d}" style="width:60px">km</div><div class="sub">숙박 · 다음 날 여기서 출발</div></div></div>`;
+      h += `<div class="row lodging" data-row="lodging" data-day="${r.d}"><div class="tm"><b>${fmt(r.arr)}</b></div><div class="ico">${ICONS.lodging}</div><div class="bd"><div class="nm"><input type="text" value="${D.lodging.name || ''}" placeholder="숙소 이름" data-lodname="${r.d}" style="flex:1;min-width:0"><input type="number" step="0.1" value="${D.lodging.km || 0}" data-lodkm="${r.d}" style="width:60px">km</div><div class="sub">숙박 · 다음 날 여기서 출발</div></div></div>`;
     } else if (r.type === 'dayend') {
-      const D = state.days[r.d], c = PAL[r.d % PAL.length], sum = C.days.find(x => x.d === r.d);
+      const D = state.days[r.d], c = PALS[state.theme || 'paper'][r.d % 5], sum = C.days.find(x => x.d === r.d);
       h += `</div><div class="dayend" data-row="dayend" data-day="${r.d}" style="background:${c.e};color:${c.t}">🌙 ${r.d + 1}일차 종료 · ${km1(sum.total)}km · ${fmt(sum.endTime)}${!(D.lodging.km > 0 || D.lodging.name) ? ` · <u data-act="addlodging" data-d="${r.d}" style="text-decoration:none;border-bottom:1px dashed">숙소 입력</u>` : ''}<span style="margin-left:auto;font-weight:400">${r.d < state.days.length - 1 ? `다음 날 ${state.days[r.d + 1].start} 출발` : '귀가'}</span></div><div class="gap"></div>`;
     }
   }
@@ -291,6 +316,7 @@ function render() {
     h += `<div class="hint">동서울 → 집 ${DATA.homeKm}km, ${dur(DATA.homeMin)} 기준 (환승 10분 포함)</div></div>`;
   }
   h += `<div class="foot">거리·고도: 카카오맵 자전거 길찾기 (${DATA.built}) · 시간은 설정한 평속으로 계산 · 기록은 이 기기 Safari에 저장</div>`;
+  document.documentElement.dataset.theme = state.theme || 'paper';
   $('#app').innerHTML = h;
   save();
 }
@@ -309,9 +335,10 @@ document.addEventListener('click', e => {
   else if (act === 'insert') { const q = t.dataset.quick; ui.timeEdit = null; if (q) { addItem(i, q); } else ui.insertAfter = ui.insertAfter === i ? null : i; }
   else if (act === 'insclose') { ui.insertAfter = null; }
   else if (act === 'additem') { const type = t.dataset.type; let label, min; if (type === 'etc') { label = ($('[data-etcname]').value || '기타').trim(); min = Number($('[data-etcmin]').value) || 15; } addItem(i, type, label, min); ui.insertAfter = null; }
-  else if (act === 'delitem') { const it = state.items.find(x => x.id === t.dataset.id); snapshot(`${it.label} ${it.min}분 삭제`); state.items = state.items.filter(x => x.id !== t.dataset.id); }
+  else if (act === 'delitem') { const id = t.dataset.id, m = id.match(/^(cert|rest)-(\d+)$/); if (m) { const si = Number(m[2]); snapshot(`${DATA.stops[si]} ${m[1] === 'cert' ? '인증' : '휴식'} 제거`); state.adj[si] = { ...adjOf(si), [m[1]]: 0 }; } else { const it = state.items.find(x => x.id === id); snapshot(`${it.label} ${it.min}분 삭제`); state.items = state.items.filter(x => x.id !== id); } }
+  else if (act === 'restore') { const si = Number(t.dataset.i), k = t.dataset.k; snapshot(`${DATA.stops[si]} ${k === 'cert' ? '인증' : '휴식'} 복원`); const a = { ...adjOf(si) }; delete a[k]; state.adj[si] = a; ui.insertAfter = null; }
   else if (act === 'edititem') { ui.editItem = t.dataset.id; }
-  else if (act === 'taxi') { return; }
+  else if (act === 'taxi' || act === 'theme') { return; }
   else if (act === 'taxitoggle') { snapshot(state.taxi ? '자전거 구간으로 전환' : '택시로 전환'); state.taxi = !state.taxi; }
   else if (act === 'daystart') { ui.dayStart = ui.dayStart === Number(t.dataset.d) ? null : Number(t.dataset.d); }
   else if (act === 'addlodging') { state.days[Number(t.dataset.d)].lodging = { name: '숙소', km: 1 }; }
@@ -329,10 +356,11 @@ document.addEventListener('change', e => {
   const el = e.target;
   if (el.dataset.set) { const v = Number(el.value); if (v >= 0) state.settings[el.dataset.set] = v; }
   else if (el.dataset.act === 'taxi') { state.taxi = el.value === '1'; }
+  else if (el.dataset.act === 'theme') { state.theme = el.value; }
   else if (el.dataset.dayin != null) { state.days[Number(el.dataset.dayin)].start = el.value || '06:30'; ui.dayStart = null; }
   else if (el.dataset.lodname != null) { state.days[Number(el.dataset.lodname)].lodging.name = el.value; }
   else if (el.dataset.lodkm != null) { state.days[Number(el.dataset.lodkm)].lodging.km = Math.max(0, Number(el.value) || 0); }
-  else if (el.dataset.itemmin != null) { const it = state.items.find(x => x.id === el.dataset.itemmin); if (it) it.min = Math.max(0, Number(el.value) || 0); ui.editItem = null; }
+  else if (el.dataset.itemmin != null) { const id = el.dataset.itemmin, m = id.match(/^(cert|rest)-(\d+)$/), v = Math.max(0, Number(el.value) || 0); if (m) { const si = Number(m[2]); state.adj[si] = { ...adjOf(si), [m[1]]: v }; } else { const it = state.items.find(x => x.id === id); if (it) it.min = v; } ui.editItem = null; }
   else return;
   render();
 });
@@ -342,7 +370,7 @@ const ghost = $('#ghost');
 let press = null, drag = null, autoScroll = 0;
 document.addEventListener('pointerdown', e => {
   const row = e.target.closest('[data-row="stop"],[data-row="item"]');
-  if (!row || e.target.closest('button,input,select,[data-act]')) return;
+  if (!row || row.dataset.builtin || e.target.closest('button,input,select,[data-act]')) return;
   if (e.target.closest('.hdl')) { e.preventDefault(); startDrag(row, e); return; }
   press = { row, x: e.clientX, y: e.clientY, timer: setTimeout(() => startDrag(row, e), 350) };
 });
